@@ -5,9 +5,9 @@
     "moduleResolution": "NodeNext",
     "outDir": "./dist",
     "rootDir": "./src",
-    "allowJs": true,                // Permite arquivos .js no projeto
-    "checkJs": false,               // Não valida erros em arquivos .js por enquanto
-    "strict": true,                 // Ativa a proteção total do TypeScript
+    "allowJs": true,                
+    "checkJs": false,               
+    "strict": true,                 
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
