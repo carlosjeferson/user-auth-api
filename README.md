@@ -145,6 +145,7 @@ npm test
 * `npm run build` → Compila o projeto TypeScript para a pasta `/dist`
 * `npm start` → Executa a aplicação compilada
 * `npm test` → Executa a suíte de testes automatizados
+* `npm run seed` → Popula o banco de dados com dados iniciais para testes
 
 ---
 
