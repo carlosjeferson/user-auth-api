@@ -80,7 +80,6 @@ Após subir a aplicação, a documentação estará disponível em:
 ### 1️⃣ Clone o repositório
 ```bash
 git clone <url-do-repositorio>
-cd learn-backend
 ````
 
 ### 2️⃣ Instale as dependências
