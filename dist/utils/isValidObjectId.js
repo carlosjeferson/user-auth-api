@@ -1,0 +1,4 @@
+export function isValidObjectId(id) {
+    return /^[a-fA-F0-9]{24}$/.test(id);
+}
+//# sourceMappingURL=isValidObjectId.js.map

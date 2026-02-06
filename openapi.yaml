@@ -1,0 +1,231 @@
+openapi: 3.0.0
+info:
+  title: Learn Backend API
+  description: |
+    API de Gerenciamento de Usuários e Autenticação.
+    Desenvolvida por Carlos Jeferson usando Node.js, Express, Prisma e MongoDB.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor Local
+
+tags:
+  - name: Autenticação
+    description: Endpoints para login e verificação de perfil.
+  - name: Usuários
+    description: CRUD completo de usuários.
+
+paths:
+  # --- AUTENTICAÇÃO ---
+  /auth/login:
+    post:
+      tags: [Autenticação]
+      summary: Realiza o login (Gera Token JWT)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Login bem-sucedido.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        401:
+          $ref: '#/components/responses/ErrorResponse'
+
+  /users/me:
+    get:
+      tags: [Autenticação]
+      summary: Retorna os dados do usuário logado (getMeUser)
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Dados do perfil atual.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBasicInfo'
+        401:
+          $ref: '#/components/responses/ErrorResponse'
+
+  # --- USUÁRIOS ---
+  /users:
+    get:
+      tags: [Usuários]
+      summary: Lista usuários com paginação e filtros (getUsers)
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 10 }
+        - name: name
+          in: query
+          schema: { type: string }
+        - name: email
+          in: query
+          schema: { type: string }
+      responses:
+        200:
+          description: Lista de usuários e metadados.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+
+    post:
+      tags: [Usuários]
+      summary: Cria um novo usuário (createUser)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        201:
+          description: Usuário criado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBasicInfo'
+        400:
+          $ref: '#/components/responses/ValidationError'
+
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, example: "60d21b4667d0d8992e610c85" }
+    
+    get:
+      tags: [Usuários]
+      summary: Busca um usuário por ID (getUser)
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBasicInfo'
+        404:
+          $ref: '#/components/responses/ErrorResponse'
+
+    put:
+      tags: [Usuários]
+      summary: Atualiza dados de um usuário (updateUser)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        200:
+          description: Usuário atualizado.
+        404:
+          $ref: '#/components/responses/ErrorResponse'
+
+    delete:
+      tags: [Usuários]
+      summary: Deleta um usuário (deleteUser)
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Usuário deletado com sucesso.
+        404:
+          $ref: '#/components/responses/ErrorResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    ErrorResponse:
+      description: Erro padrão da aplicação.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error: { type: string, example: "Mensagem de erro aqui" }
+    
+    ValidationError:
+      description: Erro retornado pelo Zod.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error: { type: string, example: "Erro de validação" }
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    field: { type: string }
+                    message: { type: string }
+
+  schemas:
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email, example: "carlos@gmail.com" }
+        password: { type: string, minLength: 8, example: "12345678" }
+
+    LoginResponse:
+      type: object
+      properties:
+        token: { type: string }
+        user: { $ref: '#/components/schemas/UserBasicInfo' }
+
+    CreateUserRequest:
+      type: object
+      required: [name, email, password]
+      properties:
+        name: { type: string, minLength: 2, example: "Carlos Jeferson" }
+        email: { type: string, format: email, example: "carlos@gmail.com" }
+        password: { type: string, minLength: 8, example: "12345678" }
+        role: { type: string, enum: [USER, ADMIN], default: USER }
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        name: { type: string, minLength: 2 }
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+
+    UserBasicInfo:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        email: { type: string }
+        role: { type: string, enum: [USER, ADMIN] }
+
+    UserListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserBasicInfo'
+        meta:
+          type: object
+          properties:
+            page: { type: integer }
+            limit: { type: integer }
+            total: { type: integer }

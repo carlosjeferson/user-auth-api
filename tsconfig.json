@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "allowJs": true,                // Permite arquivos .js no projeto
+    "checkJs": false,               // Não valida erros em arquivos .js por enquanto
+    "strict": true,                 // Ativa a proteção total do TypeScript
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "declaration": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "tests", "dist"]
+}
