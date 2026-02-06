@@ -1,5 +1,8 @@
 # 🚀 Learn Backend – API de Usuários & Autenticação
 
+🔗 **API em produção:** https://user-auth-api-mn9y.onrender.com  
+📄 **Swagger:** https://user-auth-api-mn9y.onrender.com/api-docs
+
 API REST desenvolvida com **Node.js e TypeScript**, focada em **boas práticas de backend**, segurança, organização de código e padrões utilizados no mercado.
 
 O projeto implementa um sistema completo de **gerenciamento de usuários**, com autenticação JWT, controle de acesso por perfil, validação de dados e testes automatizados.  
