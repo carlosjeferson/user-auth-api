@@ -79,7 +79,7 @@ Após subir a aplicação, a documentação estará disponível em:
 
 ### 1️⃣ Clone o repositório
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/carlosjeferson/user-auth-api
 ````
 
 ### 2️⃣ Instale as dependências
